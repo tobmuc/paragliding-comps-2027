@@ -1,0 +1,2250 @@
+<!DOCTYPE html>
+<html lang="de" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paragliding Comps 2027 – Master-Kalender & Buddy-Planer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0b1120;
+      color: #f1f5f9;
+    }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+    /* Custom Checkbox */
+    .buddy-cb {
+      appearance: none;
+      width: 1.35rem;
+      height: 1.35rem;
+      border: 2px solid #475569;
+      border-radius: 0.375rem;
+      background-color: #1e293b;
+      cursor: pointer;
+      display: inline-grid;
+      place-content: center;
+      transition: all 0.15s ease-in-out;
+    }
+    .buddy-cb:hover {
+      border-color: #94a3b8;
+      transform: scale(1.06);
+    }
+    .buddy-cb::before {
+      content: "";
+      width: 0.7rem;
+      height: 0.7rem;
+      transform: scale(0);
+      transition: 120ms transform ease-in-out;
+      box-shadow: inset 1em 1em white;
+      transform-origin: center;
+      clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    }
+    .buddy-cb:checked::before {
+      transform: scale(1);
+    }
+    .buddy-cb-tobi:checked {
+      background-color: #0ea5e9;
+      border-color: #0ea5e9;
+      box-shadow: 0 0 10px rgba(14, 165, 233, 0.45);
+    }
+    .buddy-cb-emanuel:checked {
+      background-color: #10b981;
+      border-color: #10b981;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.45);
+    }
+    .buddy-cb-frank:checked {
+      background-color: #f59e0b;
+      border-color: #f59e0b;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.45);
+    }
+    .row-selected-any {
+      background: linear-gradient(90deg, rgba(14, 165, 233, 0.08) 0%, rgba(16, 185, 129, 0.06) 100%);
+    }
+    .row-selected-squad {
+      background: linear-gradient(90deg, rgba(14, 165, 233, 0.16) 0%, rgba(16, 185, 129, 0.14) 50%, rgba(245, 158, 11, 0.16) 100%);
+      border-left: 3px solid #38bdf8;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white; color: black; }
+    }
+  </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-sky-500 selection:text-white">
+
+  <!-- TOP HERO BANNER -->
+  <header class="relative overflow-hidden border-b border-slate-800 bg-gradient-to-b from-slate-900 via-[#0f172a] to-[#0b1120] pt-10 pb-8 px-4 sm:px-8">
+    <div class="max-w-[1600px] mx-auto">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-sky-500/10 text-sky-400 border border-sky-500/20 mb-3">
+            <span>🪂 Saison-Planer 2027</span>
+            <span>•</span>
+            <span>CIVL Comps &amp; Airtribune &amp; DHV / PWCA</span>
+          </div>
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">
+            Gleitschirm Wettbewerbe <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-emerald-400 to-amber-400">2027</span>
+          </h1>
+          <p class="mt-2 text-slate-400 max-w-3xl text-sm sm:text-base">
+            Chronologische Gesamtübersicht aller für 2027 gelisteten Paragliding-Comps (XC, Sports-Class SRS, PWC, Hike &amp; Fly, Accuracy) inklusive freigegebener Schirmklassen, vergangener Tasks, Startgebühren und interaktivem Buddy-Planer für <strong class="text-sky-400">Tobi</strong>, <strong class="text-emerald-400">Emanuel</strong> &amp; <strong class="text-amber-400">Frank</strong>.
+          </p>
+        </div>
+
+        <!-- LIVE SQUAD COUNTER CARDS -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 shrink-0">
+          <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3.5 text-center">
+            <div class="text-xs font-medium text-slate-400 uppercase tracking-wider">Events 2027</div>
+            <div id="stat-total" class="text-2xl font-bold text-white mt-0.5 mono">74</div>
+            <div class="text-[11px] text-slate-500 mt-0.5">Chronologisch</div>
+          </div>
+          <div class="bg-sky-950/30 border border-sky-500/30 rounded-xl p-3.5 text-center">
+            <div class="text-xs font-bold text-sky-400 uppercase tracking-wider">Tobi</div>
+            <div id="stat-tobi" class="text-2xl font-bold text-white mt-0.5 mono">0</div>
+            <div class="text-[11px] text-sky-300/70 mt-0.5">geplante Comps</div>
+          </div>
+          <div class="bg-emerald-950/30 border border-emerald-500/30 rounded-xl p-3.5 text-center">
+            <div class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Emanuel</div>
+            <div id="stat-emanuel" class="text-2xl font-bold text-white mt-0.5 mono">0</div>
+            <div class="text-[11px] text-emerald-300/70 mt-0.5">geplante Comps</div>
+          </div>
+          <div class="bg-amber-950/30 border border-amber-500/30 rounded-xl p-3.5 text-center">
+            <div class="text-xs font-bold text-amber-400 uppercase tracking-wider">Frank</div>
+            <div id="stat-frank" class="text-2xl font-bold text-white mt-0.5 mono">0</div>
+            <div class="text-[11px] text-amber-300/70 mt-0.5">geplante Comps</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-[1600px] mx-auto px-4 sm:px-8 py-8 space-y-10">
+
+    <!-- PROLOGUE: DHV WETTBEWERB & ANMELDE-INFORMATIONEN -->
+    <section id="prologue" class="bg-slate-900/70 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+      <div class="bg-gradient-to-r from-sky-900/40 via-slate-900 to-slate-900 px-6 py-4 border-b border-slate-800 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-500/20 text-sky-400 border border-sky-500/30 font-bold text-lg">ℹ️</span>
+          <div>
+            <h2 class="text-lg sm:text-xl font-bold text-white">Prologue: DHV Wettbewerbs- &amp; Anmelde-Informationen</h2>
+            <p class="text-xs text-slate-400">Offizielle Vorgaben, Lizenzen, Karriereleiter &amp; Fristen gemäß <a href="https://www.dhv.de/wettbewerb/" target="_blank" rel="noopener" class="text-sky-400 underline hover:text-sky-300">dhv.de/wettbewerb/</a></p>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <a href="https://www.dhv.de/wettbewerb/sportler-werden/" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">🔗 DHV: Sportler werden</a>
+          <a href="https://www.dhv.de/wettbewerb/race/" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">🔗 DHV: Race &amp; Termine 2027</a>
+          <a href="https://www.dhv.de/wettbewerb/race/liga/" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">🔗 Deutsche Gleitschirm Liga</a>
+          <a href="https://www.dhv.de/wettbewerb/race/newcomer-challenges/" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">🔗 DHV Newcomer Challenges</a>
+          <button onclick="togglePrologue()" id="btn-toggle-prologue" class="px-3 py-1.5 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 border border-sky-500/30 font-medium transition">Einklappen ▲</button>
+        </div>
+      </div>
+
+      <div id="prologue-body" class="p-6 space-y-6">
+        <!-- 4 Columns Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+          
+          <!-- Card 1: FAI Sportlizenz -->
+          <div class="bg-slate-950/60 border border-slate-800/80 rounded-xl p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-sky-500/15 text-sky-400 border border-sky-500/30">Schritt 1 • Pflicht für FAI-Comps</span>
+                <span class="text-xl">🪪</span>
+              </div>
+              <h3 class="text-base font-bold text-white mb-2">FAI-Sportlizenz &amp; CIVL-ID</h3>
+              <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                Für alle internationalen Wettbewerbe (<strong>FAI Cat 1 &amp; Cat 2</strong>) sowie Rekorde ist eine gültige <strong>FAI-Sportlizenz</strong> zwingend erforderlich (bei reinen DHV-Einsteigerwettbewerben oft noch ohne möglich, bei integrierten FAI-2-Events wie der NCC/Hessenmeisterschaft jedoch Pflicht).
+              </p>
+              <ol class="text-xs text-slate-300 space-y-2 list-decimal list-inside bg-slate-900/80 p-3 rounded-lg border border-slate-800">
+                <li><strong>DHV-Mitgliedschaft</strong> muss aktiv bestehen.</li>
+                <li>Mitgliedsantrag für den Verein <em>„Leistungssport im Gleitschirm- und Drachenflug e.V.“</em> ausfüllen und an <a href="mailto:verein@leistungssport-gs-hg.de" class="text-sky-400 underline">verein@leistungssport-gs-hg.de</a> senden (<strong>Beitragskosten trägt der DHV!</strong>).</li>
+                <li>Der Verein meldet dich automatisch beim <strong>DAeC-Landesverband Bremen</strong> an.</li>
+                <li>Nach Bestätigung die <strong>FAI-Sportlizenz direkt über die DAeC-Homepage</strong> beantragen und deine <strong>CIVL-ID</strong> in <a href="https://civlcomps.org" target="_blank" class="text-sky-400 underline">civlcomps.org</a> &amp; <a href="https://airtribune.com" target="_blank" class="text-sky-400 underline">airtribune.com</a> hinterlegen.</li>
+              </ol>
+            </div>
+            <div class="mt-3 pt-3 border-t border-slate-800/80 text-[11px] text-slate-400">
+              💡 <strong>Tipp:</strong> Unbedingt schon im Herbst/Winter 2026 erledigen, da die Erstausstellung über den DAeC einige Tage bis Wochen Vorlauf benötigt!
+            </div>
+          </div>
+
+          <!-- Card 2: Einstieg, NCC & WPRS -->
+          <div class="bg-slate-950/60 border border-slate-800/80 rounded-xl p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Schritt 2 • Einstieg &amp; WPRS</span>
+                <span class="text-xl">📈</span>
+              </div>
+              <h3 class="text-base font-bold text-white mb-2">Newcomer Challenge &amp; Weltrangliste</h3>
+              <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                Der DHV empfiehlt für den Einstieg die <strong>DHV Newcomer Challenge (NCC)</strong> oder die <strong>Junior Challenge (U28)</strong>. Erfahrene Liga- und Nationalteam-Coaches begleiten dich mit täglichen Task-Briefings und ausführlichen Debriefings.
+              </p>
+              <ul class="text-xs text-slate-300 space-y-1.5 bg-slate-900/80 p-3 rounded-lg border border-slate-800">
+                <li>• <strong>Voraussetzungen NCC:</strong> B-Schein, DHV-Mitgliedschaft bevorzugt, Schirm <strong>bis max. EN-C</strong>, sicheres Fliegen in der Gruppe.</li>
+                <li>• <strong>WPRS (World Pilot Ranking System):</strong> Auf allen FAI-2- und FAI-1-Bewerben sammelst du Weltranglistenpunkte. Es zählen die <strong>4 besten Ergebnisse der letzten 2 Jahre</strong> (volle Punkte ab 3 gültigen Tasks).</li>
+                <li>• <strong>Strategie:</strong> Auch ohne WPRS-Punkte darf man sich bei fast allen internationalen FAI-2-Open anmelden! Frühzeitig bei kleineren FAI-2-Comps Punkte sammeln, um für begehrte Events selektiert zu werden.</li>
+              </ul>
+            </div>
+            <div class="mt-3 pt-3 border-t border-slate-800/80 text-[11px] text-slate-400">
+              🎯 <strong>Aufstieg:</strong> Aus der NCC kann der Ligaausschuss pro Event bis zu 5 talentierte Pilot:innen direkt für die Deutsche Liga des Folgejahres nominieren!
+            </div>
+          </div>
+
+          <!-- Card 3: Deutsche Liga & German Open 2027 -->
+          <div class="bg-slate-950/60 border border-slate-800/80 rounded-xl p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-amber-500/15 text-amber-400 border border-amber-500/30">Schritt 3 • Liga &amp; DM 2027</span>
+                <span class="text-xl">🏆</span>
+              </div>
+              <h3 class="text-base font-bold text-white mb-2">Deutsche Gleitschirm Liga &amp; DM 2027</h3>
+              <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                Die <strong>Deutsche Gleitschirm Liga</strong> ist die höchste nationale Plattform. Nur eingeschriebene Liga-Pilot:innen können <strong>Deutscher Meister / Deutsche Meisterin</strong> werden (die German Open selbst ist aber auch für internationale und Gast-Piloten nach WPRS/Rangliste offen!).
+              </p>
+              <div class="text-xs text-slate-300 space-y-1.5 bg-slate-900/80 p-3 rounded-lg border border-slate-800">
+                <div class="font-semibold text-amber-300">Qualifikation &amp; Fristen zur Liga:</div>
+                <div>• Top 16 Gesamtwertung Liga Vorjahr</div>
+                <div>• Top 35 deutsche Kaderrangliste (Stichtag 01.10.)</div>
+                <div>• Top-Platzierte aus Landesmeisterschaften, NCC &amp; Junior Challenge</div>
+                <div>• <strong>Wildcard-Anträge:</strong> Bis spätestens <strong>01.10.</strong> der Vorsaison an <a href="mailto:ligaausschuss@googlegroups.com" class="text-sky-400 underline">ligaausschuss@googlegroups.com</a>.</div>
+                <div>• <strong>Liga-Anmeldung:</strong> Öffnet jeweils im <strong>Oktober</strong> für das Folgejahr.</div>
+              </div>
+            </div>
+            <div class="mt-3 pt-3 border-t border-slate-800/80 text-[11px] text-amber-300 font-medium">
+              🇪🇸 <strong>Highlight 2027:</strong> German Open &amp; DM findet vom <strong>12.–18.09.2027 in Algodonales (Spanien)</strong> mit 7 geplanten Tasks statt (Voranmeldung bis 01.05.2027, 360 €).
+            </div>
+          </div>
+
+          <!-- Card 4: Schirmklassen, SRS, PWC & Anti-Doping -->
+          <div class="bg-slate-950/60 border border-slate-800/80 rounded-xl p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-purple-500/15 text-purple-400 border border-purple-500/30">Schritt 4 • Klassen &amp; Regeln</span>
+                <span class="text-xl">🪂</span>
+              </div>
+              <h3 class="text-base font-bold text-white mb-2">Schirmklassen (SRS / Open) &amp; NADA</h3>
+              <ul class="text-xs text-slate-300 space-y-2 bg-slate-900/80 p-3 rounded-lg border border-slate-800">
+                <li>
+                  <strong class="text-emerald-400">Sports Class (EN-A bis EN-C):</strong> Bei den <strong>SRS (Sports-Class Racing Series)</strong> sowie speziellen Sports-Comps (Manilla, Corryong Sports, Naviter Open) sind <strong>maximal EN-C Schirme</strong> zugelassen (keine EN-D / CCC). Für SRS ist eine SRS-Jahresmitgliedschaft (45 €) nötig.
+                </li>
+                <li>
+                  <strong class="text-sky-400">Serial Class (bis EN-D) &amp; Open Class (CCC):</strong> Klassische FAI-2-Open werten meist Overall (bis CCC), Serial (bis EN-D), Sport (bis EN-C) und Fun/Club (bis EN-B) parallel in einem Rennen.
+                </li>
+                <li>
+                  <strong class="text-rose-400">Anti-Doping (WADA / NADA):</strong> Bei allen FAI-Wettbewerben gilt der WADA-Code. Im Luftsport sind während des Wettkampfs u. a. <strong>Alkohol, Cannabis und Beta-Blocker</strong> strikt verboten. Medikamente vorab über <em>NADAmed</em> prüfen (ggf. TUE-Ausnahmegenehmigung 30 Tage vorab beantragen).
+                </li>
+              </ul>
+            </div>
+            <div class="mt-3 pt-3 border-t border-slate-800/80 text-[11px] text-slate-400">
+              📋 <strong>Scoring im XC:</strong> Bis zu 1000 Punkte pro Tag (Distanz + Speed + Leading Points). Bei mehreren Tasks greift <strong>FTV (Fixed Total Validity)</strong> als Streicher-System (ca. 20–25 % Abzug der schlechtesten Läufe).
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- FILTER & BUDDY TOOLBAR -->
+    <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl sticky top-2 z-30 backdrop-blur-md">
+      <div class="flex flex-col xl:flex-row gap-4 items-stretch xl:items-center justify-between">
+        
+        <!-- Search & Dropdown Filters -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 flex-grow">
+          <div class="relative sm:col-span-2 lg:col-span-1">
+            <input type="text" id="filter-search" oninput="renderTable()" placeholder="Suche (Event, Ort, Land)..."
+              class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500" />
+          </div>
+
+          <select id="filter-month" onchange="renderTable()" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-sky-500">
+            <option value="all">📅 Alle Monate (2027)</option>
+            <option value="01">Januar 2027</option>
+            <option value="02">Februar 2027</option>
+            <option value="03">März 2027</option>
+            <option value="04">April 2027</option>
+            <option value="05">Mai 2027</option>
+            <option value="06">Juni 2027</option>
+            <option value="07">Juli 2027</option>
+            <option value="08">August 2027</option>
+            <option value="09">September 2027</option>
+            <option value="10">Oktober 2027</option>
+            <option value="11">November 2027</option>
+            <option value="12">Dezember 2027</option>
+          </select>
+
+          <select id="filter-discipline" onchange="renderTable()" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-sky-500">
+            <option value="all">🪂 Alle Disziplinen</option>
+            <option value="XC">XC / Cross-Country (alle)</option>
+            <option value="SRS">↳ nur Sports-Class (SRS / bis EN-C)</option>
+            <option value="Liga">↳ nur Deutsche Liga / DM</option>
+            <option value="PWC">↳ nur PWC / World Cup</option>
+            <option value="Hike & Fly">🏔️ Hike &amp; Fly</option>
+            <option value="Accuracy">🎯 Accuracy (Punktlanden)</option>
+          </select>
+
+          <select id="filter-wings" onchange="renderTable()" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-sky-500">
+            <option value="all">🛡️ Alle Schirmklassen</option>
+            <option value="enc">EN-C tauglich (Open &amp; Sport Class)</option>
+            <option value="only-enc">Reine Sport-Class Comps (max. EN-C)</option>
+            <option value="ccc">CCC / EN-D zugelassen</option>
+          </select>
+
+          <select id="filter-buddy" onchange="renderTable()" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-sky-500">
+            <option value="all">👥 Alle Events anzeigen</option>
+            <option value="any">✅ Mind. 1 Buddy markiert</option>
+            <option value="all3">🔥 Komplettes Trio (Tobi + Emanuel + Frank)</option>
+            <option value="tobi">🟦 Nur Tobi markiert</option>
+            <option value="emanuel">🟩 Nur Emanuel markiert</option>
+            <option value="frank">🟨 Nur Frank markiert</option>
+          </select>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
+          <button onclick="exportCSV()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition shadow">
+            📥 CSV Export
+          </button>
+          <button onclick="exportJSON()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-medium text-xs transition">
+            💾 Backup JSON
+          </button>
+          <label class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-medium text-xs transition cursor-pointer">
+            📂 Import JSON
+            <input type="file" id="import-json" accept=".json" onchange="importJSON(event)" class="hidden" />
+          </label>
+          <button onclick="resetFilters()" class="px-3 py-2 rounded-xl bg-slate-800/70 hover:bg-slate-700 text-slate-400 hover:text-white text-xs transition">
+            Filter Reset
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CHRONOLOGICAL COMPETITION TABLE -->
+    <section class="bg-slate-900/70 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-950/90 border-b border-slate-800 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+              <th class="py-3.5 px-3 text-center w-12">#</th>
+              <th class="py-3.5 px-3 w-28">Beginn</th>
+              <th class="py-3.5 px-3 w-28">Ende</th>
+              <th class="py-3.5 px-4 min-w-[260px]">Wettbewerb &amp; Links</th>
+              <th class="py-3.5 px-4 min-w-[190px]">Austragungsort</th>
+              <th class="py-3.5 px-4 min-w-[220px]">Freigegebene Schirmklassen</th>
+              <th class="py-3.5 px-4 min-w-[260px]">Geplante Tasks &amp; Vorjahres-Tasks</th>
+              <th class="py-3.5 px-4 min-w-[210px]">Gebühren (2027 &amp; Vorjahre)</th>
+              <th class="py-3.5 px-3 text-center w-20 bg-sky-950/30 text-sky-400 border-l border-slate-800">Tobi</th>
+              <th class="py-3.5 px-3 text-center w-20 bg-emerald-950/30 text-emerald-400 border-l border-slate-800">Emanuel</th>
+              <th class="py-3.5 px-3 text-center w-20 bg-amber-950/30 text-amber-400 border-l border-slate-800">Frank</th>
+            </tr>
+          </thead>
+          <tbody id="comp-tbody" class="divide-y divide-slate-800/70 text-xs sm:text-sm">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="max-w-[1600px] mx-auto px-4 sm:px-8 py-8 text-center text-xs text-slate-500 border-t border-slate-800/80 mt-12">
+    <p>Datenbasis: <a href="https://civlcomps.org/events" target="_blank" class="text-sky-400 hover:underline">civlcomps.org/events</a> • <a href="https://airtribune.com/feed" target="_blank" class="text-sky-400 hover:underline">airtribune.com</a> • <a href="https://www.dhv.de/wettbewerb/" target="_blank" class="text-sky-400 hover:underline">dhv.de/wettbewerb</a> • <a href="https://pwca.events" target="_blank" class="text-sky-400 hover:underline">pwca.events</a> (Stand: Oktober 2026 für Saison 2027).</p>
+    <p class="mt-1">Alle Checkbox-Auswahlen für <strong>Tobi</strong>, <strong>Emanuel</strong> und <strong>Frank</strong> werden automatisch lokal im Browser gespeichert und können jederzeit als JSON/CSV geteilt werden.</p>
+  </footer>
+
+  <script>
+    const EVENTS_DATA = [
+  {
+    "id": "ev-01",
+    "start": "2027-01-05",
+    "end": "2027-01-09",
+    "name": "Andes Open 2027 – FAI Cat 2 & National Championship",
+    "location": "Loma De Los Angeles, Mérida",
+    "country": "Venezuela",
+    "flag": "🇻🇪",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/andes-open-2027-fai-category-2-national-championship"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open / Serial / Sport EN-C & darunter)",
+    "wing_badge": "Open / Serial / Sport",
+    "tasks_info": "5 geplante Task-Tage | Vorjahre (Open Andes 2025): 4–5 Race-to-Goal Tasks (ca. 45–75 km)",
+    "fees_info": "2027: 50 USD | Vorjahre: ca. 50–80 USD"
+  },
+  {
+    "id": "ev-02",
+    "start": "2027-01-09",
+    "end": "2027-01-13",
+    "name": "Open Distance Challenge Apía 2027 (Records en el Horizonte)",
+    "location": "Apía, Risaralda",
+    "country": "Kolumbien",
+    "flag": "🇨🇴",
+    "discipline": "XC",
+    "fai_cat": "Open / XC",
+    "sources": [
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/records-en-el-horizonte/"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme zugelassen (EN-A bis CCC)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "5 geplante Task-Tage (Open Distance / XC-Challenge) | Vorjahre: 4–5 XC-Wertungstage",
+    "fees_info": "2027: 200 EUR (inkl. Live-Tracker & Shuttle) | Vorjahre: ca. 180–200 EUR"
+  },
+  {
+    "id": "ev-03",
+    "start": "2027-01-10",
+    "end": "2027-01-16",
+    "name": "22nd Monarca Paragliding Open 2027",
+    "location": "Valle de Bravo (El Peñón)",
+    "country": "Mexiko",
+    "flag": "🇲🇽",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/22th-monarca-paragliding-open-2027"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open / Serial EN-D / Sport EN-C)",
+    "wing_badge": "Open / Serial / Sport",
+    "tasks_info": "6 geplante Tasks | 2026: 6 Tasks (68.4 km, 90.1 km, 88.4 km, ...) | 2025: 6 Tasks (61.3–107.3 km)",
+    "fees_info": "2027: 485 USD | Vorjahre (2025/2026): 450–485 USD"
+  },
+  {
+    "id": "ev-04",
+    "start": "2027-01-19",
+    "end": "2027-01-26",
+    "name": "Primera Válida Nacional Open Roldanillo 2027",
+    "location": "Roldanillo, Valle del Cauca",
+    "country": "Kolumbien",
+    "flag": "🇨🇴",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/primera-valida-nacional-open-roldanillo-2027"
+      },
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/opennacional2027/"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme zugelassen (Overall / Serial / Sport / Fun)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "7 geplante Tasks | 2026: 8 Tasks geflogen (ca. 60–95 km) | 2025: 8 Tasks geflogen (bis 90.1 km)",
+    "fees_info": "2027: 380 EUR | Vorjahre: 2026: 350 EUR (Early 330 EUR), 2025: 350 EUR"
+  },
+  {
+    "id": "ev-05",
+    "start": "2027-01-26",
+    "end": "2027-01-28",
+    "name": "Winter Paragliding Games 2027 – Stage 1",
+    "location": "Taldykorgan",
+    "country": "Kasachstan",
+    "flag": "🇰🇿",
+    "discipline": "Accuracy",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/winter-paragliding-games-stage-1"
+      }
+    ],
+    "wing_classes": "EN-A bis EN-C (Accuracy-Zertifizierung gem. FAI Sec. 7C)",
+    "wing_badge": "Accuracy (EN-A–C)",
+    "tasks_info": "Bis zu 7–10 Durchgänge | 2026 (Ice Games Stage 1): 5 Runden gewertet",
+    "fees_info": "Vorjahr (2026): 60 EUR"
+  },
+  {
+    "id": "ev-06",
+    "start": "2027-01-27",
+    "end": "2027-01-31",
+    "name": "Jerai International Paragliding XC Championship 2027",
+    "location": "Yan, Kedah (Gunung Jerai)",
+    "country": "Malaysia",
+    "flag": "🇲🇾",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/jerai-international-paragliding-xc-championship-2027"
+      }
+    ],
+    "wing_classes": "Open & Sport Class (EN-A bis EN-D / CCC, Fokus Sport Class)",
+    "wing_badge": "Open & Sport Class",
+    "tasks_info": "4–5 geplante Tasks | Vorjahr (SIAG Malaysia 2026): 3 Tasks gewertet",
+    "fees_info": "2027: 180 EUR | Vorjahr (2026): 630 MYR (ca. 135 EUR)"
+  },
+  {
+    "id": "ev-07",
+    "start": "2027-01-27",
+    "end": "2027-02-03",
+    "name": "Copa Niviuk 2027 – IV Edición",
+    "location": "Roldanillo, Valle del Cauca",
+    "country": "Kolumbien",
+    "flag": "🇨🇴",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/copa-niviuk-2027-iv-edition"
+      },
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/copa-niviuk-2027-iv-edicion/"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme zugelassen (Overall / Serial / Sport EN-C / Club EN-B)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "7 geplante Tasks | 2026 (III Ed.): 6 Tasks | 2025 (II Ed.): 7 Tasks (65–95 km im Cauca-Tal)",
+    "fees_info": "2027: 380 EUR | Vorjahre (2025/2026): 350 EUR"
+  },
+  {
+    "id": "ev-08",
+    "start": "2027-01-29",
+    "end": "2027-01-31",
+    "name": "Winter Paragliding Games 2027 – Stage 2",
+    "location": "Taldykorgan",
+    "country": "Kasachstan",
+    "flag": "🇰🇿",
+    "discipline": "Accuracy",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/winter-paragliding-games-stage-2"
+      }
+    ],
+    "wing_classes": "EN-A bis EN-C (Accuracy-Zertifizierung gem. FAI Sec. 7C)",
+    "wing_badge": "Accuracy (EN-A–C)",
+    "tasks_info": "Bis zu 7–10 Durchgänge | 2026 (Ice Games Stage 2): 7 Runden gewertet",
+    "fees_info": "Vorjahr (2026): 60 EUR"
+  },
+  {
+    "id": "ev-09",
+    "start": "2027-01-31",
+    "end": "2027-02-06",
+    "name": "Manilla PG Sports TDD 2027",
+    "location": "Mt Borah, Manilla NSW",
+    "country": "Australien",
+    "flag": "🇦🇺",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/manilla-pg-sports-tdd-2027/"
+      }
+    ],
+    "wing_classes": "Nur bis EN-C zugelassen (❌ keine EN-D / CCC Schirme)",
+    "wing_badge": "Sport Class (bis EN-C)",
+    "tasks_info": "7 geplante Task-Tage (Task Definition by Director) | Vorjahre: 5–6 Tasks (50–90 km)",
+    "fees_info": "2027: 175 AUD (ca. 105 EUR) | Vorjahre: 150–175 AUD"
+  },
+  {
+    "id": "ev-10",
+    "start": "2027-02-04",
+    "end": "2027-02-11",
+    "name": "Copa de las Américas Roldanillo 2027",
+    "location": "Roldanillo, Valle del Cauca",
+    "country": "Kolumbien",
+    "flag": "🇨🇴",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/copa-de-las-americas-roldanillo-2027"
+      },
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/copadelasamericas2027/"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme zugelassen (Open / Serial / Sport / Club)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "7 geplante Tasks | 2026: 5 Tasks gewertet | 2025: 5 Tasks gewertet (60–90 km)",
+    "fees_info": "2027: 380 EUR | Vorjahre: 2026: 350 EUR, 2025: 329 CHF (~350 EUR)"
+  },
+  {
+    "id": "ev-11",
+    "start": "2027-02-06",
+    "end": "2027-02-10",
+    "name": "11th Thailand Paragliding Accuracy ASEAN Friendships Open – AFA League",
+    "location": "Pha Tak Suea, Nongkhai",
+    "country": "Thailand",
+    "flag": "🇹🇭",
+    "discipline": "Accuracy",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/11TPGAAFO2027"
+      }
+    ],
+    "wing_classes": "EN-A bis EN-C (Accuracy)",
+    "wing_badge": "Accuracy (EN-A–C)",
+    "tasks_info": "Bis zu 10 Runden | 2026 (10th Ed.): 7 Runden | 2025 (9th Ed.): 7 Runden",
+    "fees_info": "Vorjahre (2025/2026): ca. 120–150 USD (ca. 115–140 EUR)"
+  },
+  {
+    "id": "ev-12",
+    "start": "2027-02-06",
+    "end": "2027-02-12",
+    "name": "PWCA Asian Tour India – Panchgani 2027",
+    "location": "Panchgani, Maharashtra",
+    "country": "Indien",
+    "flag": "🇮🇳",
+    "discipline": "XC / PWC",
+    "fai_cat": "FAI Cat 2 (PWC)",
+    "sources": [
+      {
+        "label": "PWCA",
+        "url": "https://pwca.events/"
+      }
+    ],
+    "wing_classes": "CCC & EN-D (PWCA Zulassung, mind. EN-C/D & WPRS/PWC-Qualifikation)",
+    "wing_badge": "CCC / EN-D (PWC)",
+    "tasks_info": "6–7 geplante Tasks | Vorjahre (Asian Tour): 5–6 Tasks (55–85 km)",
+    "fees_info": "PWCA Asian Tour Standard: 300 EUR (+ 75 EUR PWCA Jahresbeitrag)"
+  },
+  {
+    "id": "ev-13",
+    "start": "2027-02-13",
+    "end": "2027-02-19",
+    "name": "2nd Copa Dédalo's – Piedechinche 2027 powered by SupAir",
+    "location": "Piedechinche, Palmira",
+    "country": "Kolumbien",
+    "flag": "🇨🇴",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/2nd-cup-dedalo-s-piedechinche-2027"
+      },
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/2nd-copa-dedalos-piedechinche-2027-powered-sup-air/"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme zugelassen (sehr einsteigerfreundlich, Sport & Open)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "7 geplante Tasks | 2026 (1st Ed.): 7 Tasks geflogen | 2025 (Pre-PWC): 5 Tasks",
+    "fees_info": "2027: 320 EUR | Vorjahr (2026): 350 EUR"
+  },
+  {
+    "id": "ev-14",
+    "start": "2027-02-13",
+    "end": "2027-02-19",
+    "name": "Bright Open 2027 (Australian Nationals)",
+    "location": "Mystic Launch, Bright VIC",
+    "country": "Australien",
+    "flag": "🇦🇺",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/brigth-open-2027"
+      },
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/bright-open-2027/"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme zugelassen (Open / Serial / Sport / Fun)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "7 geplante Tasks | 2026: 5 Tasks (76.5 km, 90.6 km, 49.4 km, ...) | 2025: 3 Tasks",
+    "fees_info": "2027: 320 AUD (~195 EUR) | Vorjahre (2025/2026): 300–320 AUD"
+  },
+  {
+    "id": "ev-15",
+    "start": "2027-02-13",
+    "end": "2027-02-21",
+    "name": "14th FAI World Paragliding Accuracy Championships",
+    "location": "Pha Tak Suea, Nongkhai",
+    "country": "Thailand",
+    "flag": "🇹🇭",
+    "discipline": "Accuracy",
+    "fai_cat": "FAI Cat 1 (WM)",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/pga-worlds-2027"
+      }
+    ],
+    "wing_classes": "Accuracy-Schirme gem. FAI Cat-1 Reglement (Nominierung über Nationalteam/DHV)",
+    "wing_badge": "FAI Cat 1 (Nationalteam)",
+    "tasks_info": "12 geplante Durchgänge | 2026 (Asian Champs): 12 Runden | 2025 (13th WM): 12 Runden",
+    "fees_info": "Vorjahr (13. WM 2025): 420 EUR pro Pilot (200 EUR Teamleader)"
+  },
+  {
+    "id": "ev-16",
+    "start": "2027-02-14",
+    "end": "2027-02-21",
+    "name": "Paragliding World Cup (PWC) India – Panchgani 2027",
+    "location": "Panchgani, Maharashtra",
+    "country": "Indien",
+    "flag": "🇮🇳",
+    "discipline": "XC / PWC",
+    "fai_cat": "FAI Cat 2 (PWC)",
+    "sources": [
+      {
+        "label": "PWCA",
+        "url": "https://pwca.events/"
+      }
+    ],
+    "wing_classes": "CCC & EN-D (PWCA Reglement & PWC-Qualifikation)",
+    "wing_badge": "CCC / EN-D (PWC)",
+    "tasks_info": "7 geplante Tasks | 2026 (PWC India): 6 Tasks (ca. 60–95 km)",
+    "fees_info": "PWCA World Cup Gebühr: 375 EUR (+ 75 EUR PWCA Membership)"
+  },
+  {
+    "id": "ev-17",
+    "start": "2027-02-21",
+    "end": "2027-02-27",
+    "name": "Corryong PG Open 2027",
+    "location": "Mt Elliot, Corryong VIC",
+    "country": "Australien",
+    "flag": "🇦🇺",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/corryong-pg-open-2027"
+      },
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/corryong-pg-open-2027/"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme zugelassen (Overall / Serial / Sport / Standard / Intermediate)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "7 geplante Tasks | 2026: 3 Tasks | 2025: 5 Tasks (60–95 km Alpine XC)",
+    "fees_info": "2027: 320 AUD (~195 EUR) | Vorjahre: 2026: 320 AUD, 2025: 300 AUD"
+  },
+  {
+    "id": "ev-18",
+    "start": "2027-02-23",
+    "end": "2027-03-02",
+    "name": "8th British Winter Open 2027",
+    "location": "Panchgani, Maharashtra",
+    "country": "Indien",
+    "flag": "🇮🇳",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/bwo2027/"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme zugelassen (CCC & Sport Class, vergibt PWCA Letters)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "7 geplante Tasks | Vorjahre (BWO): 6–7 Tasks (55–90 km)",
+    "fees_info": "2027: 300 GBP (~355 EUR) | Vorjahre: 280–300 GBP"
+  },
+  {
+    "id": "ev-19",
+    "start": "2027-02-25",
+    "end": "2027-02-28",
+    "name": "Open Paragliding Costa Rica 2027",
+    "location": "San Isidro de El General, Pérez Zeledón",
+    "country": "Costa Rica",
+    "flag": "🇨🇷",
+    "discipline": "XC",
+    "fai_cat": "Open / Cat 2",
+    "sources": [
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/open-paragliding-costa-rica-2027/"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme zugelassen (Open / Sport / Fun)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "4 geplante Tasks | Vorjahre (Zion Open / Costa Rica): 3–4 Tasks (35–65 km)",
+    "fees_info": "2027: 160 USD (~150 EUR) | Vorjahre: 150–160 USD"
+  },
+  {
+    "id": "ev-20",
+    "start": "2027-02-28",
+    "end": "2027-03-03",
+    "name": "Andes Tour Hike and Fly Challenge 2027",
+    "location": "Medellín",
+    "country": "Kolumbien",
+    "flag": "🇨🇴",
+    "discipline": "Hike & Fly",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/andes-tour-hike-and-fly-2026"
+      },
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/andes-tour-hike-and-fly-challenge/"
+      }
+    ],
+    "wing_classes": "Zertifizierte Hike & Fly / XC-Ausrüstung (EN-A bis EN-D)",
+    "wing_badge": "Hike & Fly (EN-A–D)",
+    "tasks_info": "4 Etappen-Tage | Vorjahre: 3–4 Mehrtagestasks durch die Anden",
+    "fees_info": "2027: 100 EUR | Vorjahre: ca. 100 EUR"
+  },
+  {
+    "id": "ev-21",
+    "start": "2027-03-10",
+    "end": "2027-03-14",
+    "name": "Vipava Valley Open 2027",
+    "location": "Lijak, Nova Gorica",
+    "country": "Slowenien",
+    "flag": "🇸🇮",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/vipava-valley-open-2027"
+      },
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/vv-open-2027/"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme zugelassen (Open / Serial / Sport / Fun)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "5 geplante Tasks | 2026: 2 Tasks | 2025: 4 Tasks (50–85 km entlang der Julischen Alpen/Krass-Kante)",
+    "fees_info": "2027: 200 EUR (gestaffelt nach Zahlungsdatum) | Vorjahre: 2026: 200 EUR, 2025: 120 EUR"
+  },
+  {
+    "id": "ev-22",
+    "start": "2027-03-10",
+    "end": "2027-03-14",
+    "name": "+7 Campeonato Argentino de Parapente (Copa Desafío)",
+    "location": "Villa de Merlo, San Luis",
+    "country": "Argentinien",
+    "flag": "🇦🇷",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/CopaDesafioMas7"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open / Serial / Sport / Club)",
+    "wing_badge": "Open / Serial / Sport",
+    "tasks_info": "5 geplante Tasks | Vorjahre (CAP 2025/2026): je 3 Tasks pro Stopp gewertet",
+    "fees_info": "2027: 250 USD (Early bis 20.12.) / 300 USD regulär | Vorjahre: 2026: 220 USD, 2025: 150 USD"
+  },
+  {
+    "id": "ev-23",
+    "start": "2027-03-13",
+    "end": "2027-03-20",
+    "name": "Corryong Sports Cup 2027 (SRS Qualifier)",
+    "location": "Mt Elliot, Corryong VIC",
+    "country": "Australien",
+    "flag": "🇦🇺",
+    "discipline": "XC (SRS)",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/corryong-sports-cup-20272"
+      },
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/corryong-sports-cup-2027/"
+      }
+    ],
+    "wing_classes": "Nur bis EN-C zugelassen (EN-A, EN-B, EN-C; inkl. Leicht-/Mittelgewichts- & EN-B-Wertung)",
+    "wing_badge": "Sport Class (bis EN-C)",
+    "tasks_info": "7 geplante Tasks | 2025: 8 Tasks geflogen! | 2026: 3–5 Tasks",
+    "fees_info": "2027: 320 AUD (~195 EUR) | Vorjahre: 300–320 AUD"
+  },
+  {
+    "id": "ev-24",
+    "start": "2027-03-15",
+    "end": "2027-03-21",
+    "name": "SRS Slovenia 2027 (Sports-Class Racing Series)",
+    "location": "Lijak, Nova Gorica",
+    "country": "Slowenien",
+    "flag": "🇸🇮",
+    "discipline": "XC (SRS)",
+    "fai_cat": "FAI Cat 2 (SRS)",
+    "sources": [
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/srs-2027-1/"
+      }
+    ],
+    "wing_classes": "Nur bis EN-C zugelassen (offizielle PWCA Sports-Class Racing Series, +45 EUR SRS Membership)",
+    "wing_badge": "Sport Class (bis EN-C)",
+    "tasks_info": "6–7 geplante Tasks | Vorjahr (SRS Slovenia 2026): 4–5 Tasks (50–85 km)",
+    "fees_info": "2027: 320 EUR (+ 45 EUR SRS Jahresmitgliedschaft) | Vorjahr: 300–320 EUR"
+  },
+  {
+    "id": "ev-25",
+    "start": "2027-03-24",
+    "end": "2027-03-29",
+    "name": "Trofeo Montegrappa 2027 (Oster-Klassiker)",
+    "location": "Borso del Grappa, Bassano",
+    "country": "Italien",
+    "flag": "🇮🇹",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "DHV Kalender",
+        "url": "https://www.dhv.de/wettbewerb/race/liga/"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (CCC / EN-D / Sport EN-C)",
+    "wing_badge": "Open / Serial / Sport",
+    "tasks_info": "5 geplante Tasks über Ostern | Vorjahre (2025/2026): 4–5 Tasks (65–110 km entlang der Alpensüdseite)",
+    "fees_info": "Vorjahre (2025/2026): ca. 280–320 EUR"
+  },
+  {
+    "id": "ev-26",
+    "start": "2027-04-08",
+    "end": "2027-04-10",
+    "name": "Open Trabuco H&F 2027 – Campeonato de España",
+    "location": "Villanueva del Trabuco, Málaga",
+    "country": "Spanien",
+    "flag": "🇪🇸",
+    "discipline": "Hike & Fly",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/campeonato-de-espana-parapente-h-f-2027"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme gem. RFAE Hike & Fly Reglement (EN-A bis EN-D)",
+    "wing_badge": "Hike & Fly (EN-A–D)",
+    "tasks_info": "3 geplante Tasks | 2026: 3 Tasks gewertet | 2025: 1–3 Tasks",
+    "fees_info": "2027: 150 EUR (bis 07.01.) / 180 EUR (bis 10.03.) | Vorjahr (2026): 150 / 180 EUR"
+  },
+  {
+    "id": "ev-27",
+    "start": "2027-04-08",
+    "end": "2027-04-11",
+    "name": "Staufen Cup 2027 (Deutsche Gleitschirm Liga)",
+    "location": "Bezau, Bregenzerwald",
+    "country": "Österreich",
+    "flag": "🇦🇹",
+    "discipline": "XC (Liga)",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/staufen-cup-2027"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Overall CCC/EN-D, Sport Class bis EN-C)",
+    "wing_badge": "Alle Klassen (Liga)",
+    "tasks_info": "4 geplante Tasks | 2026: 3 Tasks (60.8 km, 99.1 km, 79.4 km) | 2025: 3 Tasks (75.1 km, 75.8 km, 101.3 km)",
+    "fees_info": "2027: 160 EUR (+15 EUR Leih-Tracker falls benötigt, exkl. Bergbahn) | Vorjahre (2025/2026): 160 EUR"
+  },
+  {
+    "id": "ev-28",
+    "start": "2027-04-10",
+    "end": "2027-04-11",
+    "name": "PGA Nubigena Open 2027",
+    "location": "Radoboj",
+    "country": "Kroatien",
+    "flag": "🇭🇷",
+    "discipline": "Accuracy",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/pga-nubigena-open-2027"
+      }
+    ],
+    "wing_classes": "EN-A bis EN-C (Accuracy)",
+    "wing_badge": "Accuracy (EN-A–C)",
+    "tasks_info": "Bis zu 8 Durchgänge | 2026: 8 Runden gewertet | 2025: 5 Runden gewertet",
+    "fees_info": "2027: 70 EUR (bis 01.03.) / 90 EUR danach | Vorjahre: 2026: 70 EUR, 2025: 60 / 75 EUR"
+  },
+  {
+    "id": "ev-29",
+    "start": "2027-04-17",
+    "end": "2027-04-24",
+    "name": "Paragliding World Cup (PWC) Spain – Pegalajar 2027",
+    "location": "Pegalajar, Jaén",
+    "country": "Spanien",
+    "flag": "🇪🇸",
+    "discipline": "XC / PWC",
+    "fai_cat": "FAI Cat 2 (PWC)",
+    "sources": [
+      {
+        "label": "PWCA",
+        "url": "https://pwca.events/"
+      }
+    ],
+    "wing_classes": "CCC & EN-D (PWCA Reglement & PWC-Qualifikation)",
+    "wing_badge": "CCC / EN-D (PWC)",
+    "tasks_info": "7 geplante Tasks | 2026 (Superfinal Pegalajar): 6–8 Tasks | 2025 (Pre-PWC): 5 Tasks (60–129.5 km)",
+    "fees_info": "PWCA World Cup Gebühr: 375 EUR (+ 75 EUR PWCA Membership)"
+  },
+  {
+    "id": "ev-30",
+    "start": "2027-04-21",
+    "end": "2027-04-25",
+    "name": "Junior Challenge 2027 (prov.)",
+    "location": "Grindelwald / Alpenraum",
+    "country": "Schweiz / DACH",
+    "flag": "🇨🇭",
+    "discipline": "XC (Junior)",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "SHV/DHV Kalender",
+        "url": "https://www.dhv.de/wettbewerb/race/newcomer-challenges/"
+      }
+    ],
+    "wing_classes": "Bis EN-C / EN-D (U28 Nachwuchswettbewerb mit Coaching)",
+    "wing_badge": "Junior (U28 / bis EN-C/D)",
+    "tasks_info": "4–5 geplante Tasks | Vorjahr (2026): 4 Tasks",
+    "fees_info": "Vorjahre: ca. 150–190 EUR/CHF (ermäßigt für Junioren)"
+  },
+  {
+    "id": "ev-31",
+    "start": "2027-04-22",
+    "end": "2027-04-25",
+    "name": "Haskovo Open 2027",
+    "location": "Haskovo",
+    "country": "Bulgarien",
+    "flag": "🇧🇬",
+    "discipline": "Accuracy",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/haskovo-open-2027"
+      }
+    ],
+    "wing_classes": "EN-A bis EN-C (Accuracy)",
+    "wing_badge": "Accuracy (EN-A–C)",
+    "tasks_info": "Bis zu 8 Runden | 2025: 1–4 Runden",
+    "fees_info": "2027: 40 EUR | Vorjahr (2025): 50 EUR"
+  },
+  {
+    "id": "ev-32",
+    "start": "2027-04-26",
+    "end": "2027-04-30",
+    "name": "OPEN Jaén Paraíso Interior Pre-PWC (Test Event 3rd FAI Junior Worlds)",
+    "location": "Pegalajar, Jaén",
+    "country": "Spanien",
+    "flag": "🇪🇸",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/test-event-of-the-3rd-fai-junior-world-paragliding-champions"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open / Serial / Sport EN-C / Junior bis EN-D)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "5 geplante Tasks | 2025 (Pre-PWC Jaén): 5 Tasks (129.5 km, 77.2 km, 60.2 km, ...)",
+    "fees_info": "2027: 265 EUR | Vorjahr (2025): 245 EUR"
+  },
+  {
+    "id": "ev-33",
+    "start": "2027-04-30",
+    "end": "2027-05-02",
+    "name": "Himara Open – Llogara Air Games 2027",
+    "location": "Dhërmi (Llogara Pass)",
+    "country": "Albanien",
+    "flag": "🇦🇱",
+    "discipline": "Accuracy",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/himara-open-llogara-air-games"
+      }
+    ],
+    "wing_classes": "EN-A bis EN-C (Accuracy)",
+    "wing_badge": "Accuracy (EN-A–C)",
+    "tasks_info": "Bis zu 8 Durchgänge (Start am Llogara-Pass, Landung am Strand von Dhërmi)",
+    "fees_info": "Vorjahre: ca. 80–120 EUR (Online oder Barzahlung vor Ort)"
+  },
+  {
+    "id": "ev-34",
+    "start": "2027-05-01",
+    "end": "2027-05-02",
+    "name": "X-Scotia Hike and Fly 2027",
+    "location": "Glencoe, Scottish Highlands",
+    "country": "Großbritannien",
+    "flag": "🇬🇧",
+    "discipline": "Hike & Fly",
+    "fai_cat": "Open",
+    "sources": [
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/x-scotia-hike-and-fly-2027/"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (EN-A bis EN-D)",
+    "wing_badge": "Hike & Fly (EN-A–D)",
+    "tasks_info": "2 geplante Tagestasks in den schottischen Highlands",
+    "fees_info": "2027: 90 GBP (~105 EUR) | Vorjahre: 80–90 GBP"
+  },
+  {
+    "id": "ev-35",
+    "start": "2027-05-01",
+    "end": "2027-05-02",
+    "name": "Glencoe Scottish National 2027",
+    "location": "Glencoe, Scottish Highlands",
+    "country": "Großbritannien",
+    "flag": "🇬🇧",
+    "discipline": "XC",
+    "fai_cat": "National",
+    "sources": [
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/glencoe-scottish-national-2027/"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (EN-A bis EN-D/CCC)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "2 geplante Tasks am Wochenende",
+    "fees_info": "2027: 25 GBP (~30 EUR)"
+  },
+  {
+    "id": "ev-36",
+    "start": "2027-05-04",
+    "end": "2027-05-08",
+    "name": "28th Albania Open – PGA Grand Prix 2027",
+    "location": "Vlora",
+    "country": "Albanien",
+    "flag": "🇦🇱",
+    "discipline": "Accuracy",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/28th-albania-open-pga-grand-prix"
+      }
+    ],
+    "wing_classes": "EN-A bis EN-C (Accuracy)",
+    "wing_badge": "Accuracy (EN-A–C)",
+    "tasks_info": "Bis zu 10 Runden | 2026 (27th Ed.): 8 Runden | 2025 (26th Ed.): 10 Runden",
+    "fees_info": "Vorjahr (2026): 135 EUR"
+  },
+  {
+    "id": "ev-37",
+    "start": "2027-05-04",
+    "end": "2027-05-15",
+    "name": "PWC Superfinal 2026 – Grindelwald-Interlaken",
+    "location": "Grindelwald / Interlaken",
+    "country": "Schweiz",
+    "flag": "🇨🇭",
+    "discipline": "XC / PWC",
+    "fai_cat": "FAI Cat 2 (Superfinal)",
+    "sources": [
+      {
+        "label": "PWCA",
+        "url": "https://pwca.events/"
+      }
+    ],
+    "wing_classes": "CCC & EN-D (Qualifikation über PWC-Saison 2026 erforderlich)",
+    "wing_badge": "CCC / EN-D (PWC Elite)",
+    "tasks_info": "Bis zu 10 geplante Tasks (11 Wettkampftage) | Vorjahre (Superfinal): 7–9 hochalpine Tasks (70–130 km)",
+    "fees_info": "PWCA Superfinal Gebühr: ca. 450 EUR (+ 75 EUR PWCA Membership)"
+  },
+  {
+    "id": "ev-38",
+    "start": "2027-05-06",
+    "end": "2027-05-09",
+    "name": "Bornes to Fly 2027",
+    "location": "Manigod, Annecy / Aravis",
+    "country": "Frankreich",
+    "flag": "🇫🇷",
+    "discipline": "Hike & Fly",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/bornes-to-fly-2027"
+      }
+    ],
+    "wing_classes": "Zertifizierte Schirme (EN-A bis EN-D, 100 Piloten max.)",
+    "wing_badge": "Hike & Fly (EN-A–D)",
+    "tasks_info": "4 Etappen-Tage | 2026: 3 Tasks gewertet | 2025: 1 Task gewertet",
+    "fees_info": "2027: 150 EUR | Vorjahre: 2026: 150 EUR, 2025: 130 EUR"
+  },
+  {
+    "id": "ev-39",
+    "start": "2027-05-11",
+    "end": "2027-05-12",
+    "name": "Kosova Friendship Open 2027",
+    "location": "Obiliq",
+    "country": "Kosovo",
+    "flag": "🇽🇰",
+    "discipline": "Accuracy",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/kosova-friendship-open-2027"
+      }
+    ],
+    "wing_classes": "EN-A bis EN-C (Accuracy)",
+    "wing_badge": "Accuracy (EN-A–C)",
+    "tasks_info": "Bis zu 6 Runden | Vorjahre: 3–6 Runden",
+    "fees_info": "Vorjahr (2026): ca. 80–90 EUR"
+  },
+  {
+    "id": "ev-40",
+    "start": "2027-05-12",
+    "end": "2027-05-16",
+    "name": "Liga Nacional Boí 2027",
+    "location": "Barruera (Vall de Boí, Pyrenäen)",
+    "country": "Spanien",
+    "flag": "🇪🇸",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/liga-nacional-boi-2027"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open / Serial / Sport EN-C / Club EN-B, max. 130 Piloten)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "5 geplante Tasks | 2026: 3 Tasks (59.5 km, 59.6 km, 66.4 km)",
+    "fees_info": "2027: ca. 265 EUR (lt. Liga Nacional Tarif) | Vorjahre (2025/2026): 245–250 EUR"
+  },
+  {
+    "id": "ev-41",
+    "start": "2027-05-13",
+    "end": "2027-05-16",
+    "name": "10th Kastrioti Open Air 2027",
+    "location": "Obiliq",
+    "country": "Kosovo",
+    "flag": "🇽🇰",
+    "discipline": "Accuracy",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/10th-kastrioti-open-air-2027"
+      }
+    ],
+    "wing_classes": "EN-A bis EN-C (Accuracy)",
+    "wing_badge": "Accuracy (EN-A–C)",
+    "tasks_info": "Bis zu 10 Runden | 2026: 3 Runden | 2025: 10 Runden",
+    "fees_info": "Vorjahr (2026): 90 CHF (~95 EUR)"
+  },
+  {
+    "id": "ev-42",
+    "start": "2027-05-22",
+    "end": "2027-05-28",
+    "name": "Level Up Open 2027",
+    "location": "Trévignin (Mont Revard / Aix-les-Bains)",
+    "country": "Frankreich",
+    "flag": "🇫🇷",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/level-up-open-2027"
+      }
+    ],
+    "wing_classes": "Sport & Serial orientiert (EN-B, EN-C, EN-D; max. 96 Piloten)",
+    "wing_badge": "Open / Serial / Sport",
+    "tasks_info": "6 geplante Tasks | 2026: 5 Tasks geflogen",
+    "fees_info": "2027: 320 EUR | Vorjahre: 2026: 300 EUR, 2025: 290 EUR"
+  },
+  {
+    "id": "ev-43",
+    "start": "2027-05-26",
+    "end": "2027-05-30",
+    "name": "Alpen Cup Tolmin 2027",
+    "location": "Tolmin / Kobala",
+    "country": "Slowenien",
+    "flag": "🇸🇮",
+    "discipline": "XC (Liga)",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "SHV/DHV Kalender",
+        "url": "https://www.dhv.de/wettbewerb/race/liga/"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Overall CCC/EN-D, Sport Class bis EN-C)",
+    "wing_badge": "Alle Klassen (Liga)",
+    "tasks_info": "5 geplante Tasks | Vorjahre (Alpen Cup 2026 Feltre / Tolmin): 3–4 Tasks (60–95 km)",
+    "fees_info": "Vorjahre: ca. 200–240 EUR"
+  },
+  {
+    "id": "ev-44",
+    "start": "2027-06-02",
+    "end": "2027-06-06",
+    "name": "Liga Nacional Huéscar 2027",
+    "location": "Huéscar, Granada",
+    "country": "Spanien",
+    "flag": "🇪🇸",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/liga-nacional-huescar-2027"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open / Serial / Sport EN-C / Club EN-B)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "5 geplante Tasks | 2026: 4 Tasks (56.9 km, 50.2 km, 71.4 km, ...) | 2025: 3 Tasks (54–55 km)",
+    "fees_info": "2027: 265 EUR (Frühbucher bis Ende April) | Vorjahre: 2026: 250 EUR, 2025: 245 EUR"
+  },
+  {
+    "id": "ev-45",
+    "start": "2027-06-05",
+    "end": "2027-06-11",
+    "name": "11th Naviter Open 2027",
+    "location": "Gabrje, Tolmin (Kobala)",
+    "country": "Slowenien",
+    "flag": "🇸🇮",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/no2027/"
+      }
+    ],
+    "wing_classes": "Nur bis EN-C zugelassen (Fun, Serial & Sports Class bis EN-C)",
+    "wing_badge": "Sport Class (bis EN-C)",
+    "tasks_info": "7 geplante Tasks | Vorjahre (Naviter Open): 4–6 Tasks im Soča-Tal (55–90 km)",
+    "fees_info": "2027: 395 EUR | Vorjahre: 350–380 EUR"
+  },
+  {
+    "id": "ev-46",
+    "start": "2027-06-10",
+    "end": "2027-06-13",
+    "name": "Pyrenees Open 2027 (Hike & Fly)",
+    "location": "Panticosa, Huesca",
+    "country": "Spanien",
+    "flag": "🇪🇸",
+    "discipline": "Hike & Fly",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/pyrenees-open-2027"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (EN-A bis EN-D)",
+    "wing_badge": "Hike & Fly (EN-A–D)",
+    "tasks_info": "4 geplante Tasks | 2026: 1 Task | 2025: 4 Tasks",
+    "fees_info": "2027: 185 EUR | Vorjahre: 2026: 180 EUR, 2025: 150 EUR"
+  },
+  {
+    "id": "ev-47",
+    "start": "2027-06-13",
+    "end": "2027-06-17",
+    "name": "Campeonato de España Distancia Libre – Zarzacapilla 2027",
+    "location": "Zarza-Capilla, Badajoz",
+    "country": "Spanien",
+    "flag": "🇪🇸",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/campeonato-de-espana-distancia-libre-zarzacapilla-2027"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open Distance / Flachland-Streckenflug, EN-A bis CCC)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "5 geplante Open-Distance-Tage | 2026: 4 Tasks gewertet (Flachland-Flüge >150–250 km möglich)",
+    "fees_info": "Vorjahr (2026): ca. 200–250 EUR"
+  },
+  {
+    "id": "ev-48",
+    "start": "2027-06-13",
+    "end": "2027-06-19",
+    "name": "Barberton Paragliding Open 2027",
+    "location": "Barberton, Mpumalanga",
+    "country": "Südafrika",
+    "flag": "🇿🇦",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/barberton-paragliding-open-2027"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open / Serial / Sport / Fun)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "7 geplante Tasks | 2026: 5 Tasks | 2025: 4 Tasks",
+    "fees_info": "2027: 185 EUR / 3.750 ZAR (Early bis 30.04.), danach 5.000 ZAR (~250 EUR) | 2026: 3.500 / 4.500 ZAR"
+  },
+  {
+    "id": "ev-49",
+    "start": "2027-06-19",
+    "end": "2027-06-26",
+    "name": "Paragliding World Cup (PWC) Spain – Pedro Bernardo 2027",
+    "location": "Pedro Bernardo, Ávila",
+    "country": "Spanien",
+    "flag": "🇪🇸",
+    "discipline": "XC / PWC",
+    "fai_cat": "FAI Cat 2 (PWC)",
+    "sources": [
+      {
+        "label": "PWCA",
+        "url": "https://pwca.events/"
+      }
+    ],
+    "wing_classes": "CCC & EN-D (PWCA Reglement & PWC-Qualifikation)",
+    "wing_badge": "CCC / EN-D (PWC)",
+    "tasks_info": "7 geplante Tasks | Vorjahre (Spanien PWC): 5–6 Tasks (70–120 km)",
+    "fees_info": "PWCA World Cup Gebühr: 375 EUR (+ 75 EUR PWCA Membership)"
+  },
+  {
+    "id": "ev-50",
+    "start": "2027-06-20",
+    "end": "2027-06-27",
+    "name": "SRS France – Montclar 2027 (Sports-Class Racing Series)",
+    "location": "Saint-Jean-Montclar, Alpes-de-Haute-Provence",
+    "country": "Frankreich",
+    "flag": "🇫🇷",
+    "discipline": "XC (SRS)",
+    "fai_cat": "FAI Cat 2 (SRS)",
+    "sources": [
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/srs-2027-2/"
+      }
+    ],
+    "wing_classes": "Nur bis EN-C zugelassen (offizielle PWCA Sports-Class Racing Series)",
+    "wing_badge": "Sport Class (bis EN-C)",
+    "tasks_info": "7 geplante Tasks | Vorjahr (SRS France 2026): 5 Tasks (60–95 km in den Südalpen)",
+    "fees_info": "2027: 370 EUR (+ 45 EUR SRS Membership) | Vorjahr: 350–370 EUR"
+  },
+  {
+    "id": "ev-51",
+    "start": "2027-07-01",
+    "end": "2027-07-05",
+    "name": "10ª Copa Open Verano Roldanillo 2027",
+    "location": "Roldanillo, Valle del Cauca",
+    "country": "Kolumbien",
+    "flag": "🇨🇴",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/10a-copa-open-verano-roldanillo-fai-2"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open / Serial / Sport / Club)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "5 geplante Tasks | 2026 (9ª Ed.): 3 Tasks | 2025 (8ª Ed.): 3 Tasks",
+    "fees_info": "Vorjahre: 2026: 550.000 COP (~120 EUR), 2025: 500.000 COP (~110 EUR)"
+  },
+  {
+    "id": "ev-52",
+    "start": "2027-07-03",
+    "end": "2027-07-10",
+    "name": "Campeonato de España de Parapente – Pitolero 2027",
+    "location": "Cabezabellosa, Cáceres (Extremadura)",
+    "country": "Spanien",
+    "flag": "🇪🇸",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/campeonato-de-espana-parapente-2027"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open CCC / Serial EN-D / Sport EN-C / Club EN-B)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "7 geplante Tasks | 2026: 3 Tasks (69.9 km, 97.6 km, 43.4 km) | 2025: 5 Tasks (86.1 km, 61.6 km, 78.2 km, ...)",
+    "fees_info": "2027: 355 EUR | Vorjahre (Liga Nacional Pitolero 2025/2026): 245–250 EUR"
+  },
+  {
+    "id": "ev-53",
+    "start": "2027-07-03",
+    "end": "2027-07-10",
+    "name": "Paragliding World Cup (PWC) France – Targasonne 2027",
+    "location": "Targasonne, Font-Romeu (Pyrenäen)",
+    "country": "Frankreich",
+    "flag": "🇫🇷",
+    "discipline": "XC / PWC",
+    "fai_cat": "FAI Cat 2 (PWC)",
+    "sources": [
+      {
+        "label": "PWCA",
+        "url": "https://pwca.events/"
+      }
+    ],
+    "wing_classes": "CCC & EN-D (PWCA Reglement & PWC-Qualifikation)",
+    "wing_badge": "CCC / EN-D (PWC)",
+    "tasks_info": "7 geplante Tasks | Vorjahre (PWC France): 5–6 Tasks (65–110 km)",
+    "fees_info": "PWCA World Cup Gebühr: 375 EUR (+ 75 EUR PWCA Membership)"
+  },
+  {
+    "id": "ev-54",
+    "start": "2027-07-11",
+    "end": "2027-07-18",
+    "name": "Portuguese PG Championship 2027 (Test Event 19th FAI European Championships)",
+    "location": "Serra do Larouco, Montalegre",
+    "country": "Portugal",
+    "flag": "🇵🇹",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/test-pg-euro-2028"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (CCC / EN-D / Sport EN-C)",
+    "wing_badge": "Open / Serial / Sport",
+    "tasks_info": "7 geplante Tasks | Vorjahre (Larouco Open): 5–6 Tasks (60–100 km)",
+    "fees_info": "2027: 300 EUR | Vorjahre: 250–290 EUR"
+  },
+  {
+    "id": "ev-55",
+    "start": "2027-07-17",
+    "end": "2027-07-24",
+    "name": "1st SRS World Sports Final 2027",
+    "location": "Gemona del Friuli / Bordano",
+    "country": "Italien",
+    "flag": "🇮🇹",
+    "discipline": "XC (SRS)",
+    "fai_cat": "FAI Cat 2 (SRS Final)",
+    "sources": [
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/srs-2027-wsf/"
+      }
+    ],
+    "wing_classes": "Nur bis EN-C zugelassen (Qualifikation über SRS-Events erforderlich)",
+    "wing_badge": "Sport Class (bis EN-C)",
+    "tasks_info": "7 geplante Tasks | 2026 (PWC Gemona): 6 Tasks (ca. 65–105 km entlang der Julischen Voralpen)",
+    "fees_info": "2027: 395 EUR (+ 45 EUR SRS Membership)"
+  },
+  {
+    "id": "ev-56",
+    "start": "2027-07-18",
+    "end": "2027-07-24",
+    "name": "Flymaster Open – Macedonian & Croatian Nationals 2027",
+    "location": "Kruševo",
+    "country": "Nordmazedonien",
+    "flag": "🇲🇰",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/flymaster-open-2027"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open / Serial EN-D / Sport EN-C)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "6 geplante Tasks | Vorjahre (Kruševo Nationals/EM 2026): 6–9 Tasks im Pelagonien-Becken (65–115 km)",
+    "fees_info": "2027: ca. 290–320 EUR (TBD) | Vorjahre (Kruševo Open 2025/2026): 280–300 EUR"
+  },
+  {
+    "id": "ev-57",
+    "start": "2027-07-26",
+    "end": "2027-08-07",
+    "name": "20th FAI World Paragliding XC Championships",
+    "location": "Pantelej – Niš",
+    "country": "Serbien",
+    "flag": "🇷🇸",
+    "discipline": "XC (WM)",
+    "fai_cat": "FAI Cat 1 (WM)",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/pg-worlds-2027"
+      },
+      {
+        "label": "DHV",
+        "url": "https://www.dhv.de/wettbewerb/race/"
+      }
+    ],
+    "wing_classes": "CCC & EN-D gem. FAI Cat-1 Reglement (Nominierung über Nationalmannschaft / DHV)",
+    "wing_badge": "FAI Cat 1 (Nationalteam)",
+    "tasks_info": "10–11 geplante Task-Tage | 2026 (Test-WM Serbia Open Niš): 2–5 Tasks | 2026 EM Kruševo: 9 Tasks",
+    "fees_info": "Cat-1 WM Gebühr: ca. 550–650 EUR (Vorjahr Test-Event Niš 2026: 290 EUR)"
+  },
+  {
+    "id": "ev-58",
+    "start": "2027-08-01",
+    "end": "2027-08-07",
+    "name": "Campeonato de España Biplaza, Sport y Cat. B – Piedrahíta 2027",
+    "location": "Piedrahíta, Ávila",
+    "country": "Spanien",
+    "flag": "🇪🇸",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/campeonato-de-espana-biplaza-sport-y-B-2027"
+      }
+    ],
+    "wing_classes": "Sport Class (bis EN-C), Club Class (bis EN-B) & Tandem (Biplaza) – max. 130 Piloten",
+    "wing_badge": "Sport (EN-C) / EN-B / Tandem",
+    "tasks_info": "6 geplante Tasks | Vorjahre (SRS / Open Piedrahíta): 5–6 klassische Flachland-/Gebirgs-Tasks (60–110 km)",
+    "fees_info": "2027: 355 EUR (Solo) / 380 EUR (Biplaza) | Vorjahr (2026): 250–350 EUR"
+  },
+  {
+    "id": "ev-59",
+    "start": "2027-08-08",
+    "end": "2027-08-15",
+    "name": "Disentis Open 2027 (prov.)",
+    "location": "Disentis, Graubünden",
+    "country": "Schweiz",
+    "flag": "🇨🇭",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "SHV Kalender",
+        "url": "https://www.dhv.de/wettbewerb/race/liga/"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open / Serial / Sport / Fun)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "6 geplante Tasks | 2026 (Swiss Pre-PWC Disentis): 4–5 hochalpine Tasks im Vorderrheintal (65–115 km)",
+    "fees_info": "Vorjahr (2026): ca. 290–330 CHF"
+  },
+  {
+    "id": "ev-60",
+    "start": "2027-08-11",
+    "end": "2027-08-15",
+    "name": "Ikarus Open 2027 (Deutsche Gleitschirm Liga, prov.)",
+    "location": "Werfenweng / Bischling",
+    "country": "Österreich",
+    "flag": "🇦🇹",
+    "discipline": "XC (Liga)",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "DHV Kalender",
+        "url": "https://www.dhv.de/wettbewerb/race/liga/"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Overall CCC/EN-D, Sport Class bis EN-C)",
+    "wing_badge": "Alle Klassen (Liga)",
+    "tasks_info": "5 geplante Tasks | 2026: 4–5 Tasks | 2024: 2 Tasks | 2023: 5 Tasks",
+    "fees_info": "Vorjahre (2025/2026): ca. 190–220 EUR"
+  },
+  {
+    "id": "ev-61",
+    "start": "2027-08-15",
+    "end": "2027-08-21",
+    "name": "Gin Performance 2027",
+    "location": "Kruševo",
+    "country": "Nordmazedonien",
+    "flag": "🇲🇰",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/gin-performance-2027"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open / Serial / Sport; Fokus auf Coaching & Performance, max. 130 Piloten)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "6 geplante Tasks | 2026 (Gin Performance Camp): 3 Tasks gewertet",
+    "fees_info": "Vorjahr (2026): 290 EUR (Early bis 28.06.) / 350 EUR regulär (Rabatt für Gin-Piloten)"
+  },
+  {
+    "id": "ev-62",
+    "start": "2027-08-22",
+    "end": "2027-08-29",
+    "name": "SRS North Macedonia 2027 – Kruševo",
+    "location": "Kruševo",
+    "country": "Nordmazedonien",
+    "flag": "🇲🇰",
+    "discipline": "XC (SRS)",
+    "fai_cat": "FAI Cat 2 (SRS)",
+    "sources": [
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/srs-2027-3/"
+      }
+    ],
+    "wing_classes": "Sports Class bis EN-C (lt. SRS-Reglement; Airtribune listet max. EN-D/EN-C Subklassen)",
+    "wing_badge": "Sport Class (bis EN-C)",
+    "tasks_info": "7 geplante Tasks | Vorjahre (Kruševo SRS): 5–6 Tasks (60–95 km)",
+    "fees_info": "2027: 370 EUR (+ 45 EUR SRS Membership) | Vorjahr: 350–370 EUR"
+  },
+  {
+    "id": "ev-63",
+    "start": "2027-08-28",
+    "end": "2027-09-03",
+    "name": "Nordic Paragliding Open Yelmo 2027",
+    "location": "El Yelmo, Segura de la Sierra (Jaén)",
+    "country": "Spanien",
+    "flag": "🇪🇸",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/Nordic-paragliding-open-yelmo-2027"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open / Serial / Sport)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "6 geplante Tasks | 2026 (Pre-PWC Yelmo): 3 Tasks (124.7 km, 56.4 km, 70.1 km) | Nordic Open 2026: 5 Tasks",
+    "fees_info": "2027: 365 EUR | Vorjahre (2026): Nordic Open 300 EUR / Yelmo Open 250 EUR"
+  },
+  {
+    "id": "ev-64",
+    "start": "2027-08-28",
+    "end": "2027-09-04",
+    "name": "Paragliding World Cup (PWC) Greece – Siatista 2027",
+    "location": "Siatista, Westmazedonien",
+    "country": "Griechenland",
+    "flag": "🇬🇷",
+    "discipline": "XC / PWC",
+    "fai_cat": "FAI Cat 2 (PWC)",
+    "sources": [
+      {
+        "label": "PWCA",
+        "url": "https://pwca.events/"
+      }
+    ],
+    "wing_classes": "CCC & EN-D (PWCA Reglement & PWC-Qualifikation)",
+    "wing_badge": "CCC / EN-D (PWC)",
+    "tasks_info": "7 geplante Tasks | Vorjahre: 5–6 Tasks",
+    "fees_info": "PWCA World Cup Gebühr: 375 EUR (+ 75 EUR PWCA Membership)"
+  },
+  {
+    "id": "ev-65",
+    "start": "2027-09-12",
+    "end": "2027-09-18",
+    "name": "German Open & Deutsche Meisterschaft 2027 – Algodonales",
+    "location": "Sierra de Cádiz, Algodonales",
+    "country": "Spanien",
+    "flag": "🇪🇸",
+    "discipline": "XC (DM / Liga)",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/GermanOpenAlgodonales2027"
+      },
+      {
+        "label": "DHV",
+        "url": "https://www.dhv.de/wettbewerb/race/"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open CCC, Serial EN-D, Sport EN-C; DM-Wertung für Deutsche Liga-Piloten)",
+    "wing_badge": "Alle Klassen (DM / Liga)",
+    "tasks_info": "7 geplante Tasks (DHV-Ausschreibung) | 2026 (German Open Bassano): 5 gewertete Tasks | 2026 (CEP Algodonales): 4 Tasks (94.2 km, 53.6 km, 73.9 km) | 2025 (PWC Algodonales): 6 Tasks",
+    "fees_info": "2027: 360 EUR (bis 01.06.) / 380 EUR (ab 02.06.) | Vorjahr (Algodonales 2026): 335 EUR"
+  },
+  {
+    "id": "ev-66",
+    "start": "2027-09-12",
+    "end": "2027-09-19",
+    "name": "SRS St. André-les-Alpes 2027 (Sports-Class Racing Series)",
+    "location": "Saint-André-les-Alpes, Haute-Provence",
+    "country": "Frankreich",
+    "flag": "🇫🇷",
+    "discipline": "XC (SRS)",
+    "fai_cat": "FAI Cat 2 (SRS)",
+    "sources": [
+      {
+        "label": "Airtribune",
+        "url": "https://airtribune.com/srs-2027-4/"
+      }
+    ],
+    "wing_classes": "Nur bis EN-C zugelassen (offizielle PWCA Sports-Class Racing Series)",
+    "wing_badge": "Sport Class (bis EN-C)",
+    "tasks_info": "7 geplante Tasks | Vorjahre (St. André): 5–6 klassische Provence-Tasks (65–105 km)",
+    "fees_info": "2027: 370 EUR (+ 45 EUR SRS Membership) | Vorjahr: 350–370 EUR"
+  },
+  {
+    "id": "ev-67",
+    "start": "2027-09-17",
+    "end": "2027-09-23",
+    "name": "Test Event of the 6th FAI Asian Paragliding Accuracy Championships",
+    "location": "Jingmen, Hubei",
+    "country": "China",
+    "flag": "🇨🇳",
+    "discipline": "Accuracy",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/test-pga-asian-2028"
+      }
+    ],
+    "wing_classes": "EN-A bis EN-C (Accuracy)",
+    "wing_badge": "Accuracy (EN-A–C)",
+    "tasks_info": "Bis zu 12 Runden | Vorjahre: 7–12 Runden",
+    "fees_info": "Vorjahre (Asian Test Events): ca. 150–250 EUR"
+  },
+  {
+    "id": "ev-68",
+    "start": "2027-09-30",
+    "end": "2027-10-03",
+    "name": "Test Event of the 10th FAI European Paragliding Accuracy Championships",
+    "location": "Budva",
+    "country": "Montenegro",
+    "flag": "🇲🇪",
+    "discipline": "Accuracy",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/test-pga-euro-2028"
+      }
+    ],
+    "wing_classes": "EN-A bis EN-C (Accuracy)",
+    "wing_badge": "Accuracy (EN-A–C)",
+    "tasks_info": "Bis zu 10 Runden | 2026 (9th EM Accuracy): 12 Runden | 2025 (Test Event): 7 Runden",
+    "fees_info": "Vorjahre: Test Event 2025: 50–150 EUR (Cat-1 EM 2026: 450 EUR)"
+  },
+  {
+    "id": "ev-69",
+    "start": "2027-10-09",
+    "end": "2027-10-16",
+    "name": "1st FAI World Paragliding Hike and Fly Championships",
+    "location": "El Yelmo, Segura de la Sierra (Jaén)",
+    "country": "Spanien",
+    "flag": "🇪🇸",
+    "discipline": "Hike & Fly (WM)",
+    "fai_cat": "FAI Cat 1 (WM)",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/1st-fai-pg-hike-and-fly-worlds-2027"
+      }
+    ],
+    "wing_classes": "Zertifizierte Hike & Fly Ausrüstung gem. FAI Cat-1 Reglement (Nominierung über Nationalteam / DHV)",
+    "wing_badge": "FAI Cat 1 (H&F WM)",
+    "tasks_info": "7 geplante Wettkampftage (1. offizielle FAI Hike & Fly Weltmeisterschaft)",
+    "fees_info": "Cat-1 WM Gebühr: ca. 450–550 EUR (offizielles Bulletin folgt)"
+  },
+  {
+    "id": "ev-70",
+    "start": "2027-10-09",
+    "end": "2027-10-16",
+    "name": "CAP La Rioja 2027 (Campeonato Argentino)",
+    "location": "La Rioja",
+    "country": "Argentinien",
+    "flag": "🇦🇷",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/cap-la-rioja-2027"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open / Serial / Sport / Club – max. 80 Piloten)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "7 geplante Tasks | 2026: 2–3 Tasks | 2025: 3 Tasks",
+    "fees_info": "2027: 350 USD (1. Stufe in 3 Raten) | Vorjahre: 2026: 220 USD, 2025: 150 USD"
+  },
+  {
+    "id": "ev-71",
+    "start": "2027-10-28",
+    "end": "2027-11-01",
+    "name": "Sicily Open – Halloween Cup 2027",
+    "location": "Piana degli Albanesi (Palermo, Sizilien)",
+    "country": "Italien",
+    "flag": "🇮🇹",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/sicily-open-Hallowen-Cup"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open / Serial / Sport / Fun – max. 120 Piloten, sehr gefragt!)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "5 geplante Tasks | Vorjahre: 3–4 Tasks (45–75 km auf Sizilien)",
+    "fees_info": "2027: 260 EUR | Vorjahre: ca. 220–250 EUR"
+  },
+  {
+    "id": "ev-72",
+    "start": "2027-11-06",
+    "end": "2027-11-13",
+    "name": "Test Event of the 8th FAI Pan American Paragliding Championships",
+    "location": "Tapalpa, Jalisco",
+    "country": "Mexiko",
+    "flag": "🇲🇽",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/test-pg-panam-2028"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open CCC / Serial EN-D / Sport EN-C)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "7 geplante Tasks | Vorjahr (PanAm Test Event): 4 Tasks gewertet",
+    "fees_info": "2027: 380 EUR (inkl. Live-Tracker, Shuttle, Rettungshelikopter) | Vorjahre: ca. 350–380 EUR"
+  },
+  {
+    "id": "ev-73",
+    "start": "2027-12-04",
+    "end": "2027-12-08",
+    "name": "Liga Nacional Tenerife 2027",
+    "location": "Adeje, Teneriffa (Kanaren)",
+    "country": "Spanien",
+    "flag": "🇪🇸",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/liga-nacional-tenerife-2027"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open / Serial / Sport / Club – max. 122 Piloten)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "5 geplante Tasks | 2025: 5 Tasks (48.7 km, 63.7 km, 55.1 km, ...)",
+    "fees_info": "2027: 265 EUR | Vorjahre (2025/2026): 245 CHF / 250 EUR"
+  },
+  {
+    "id": "ev-74",
+    "start": "2027-12-10",
+    "end": "2027-12-14",
+    "name": "Tenerife XPO 2027 (Pre-PWC)",
+    "location": "Adeje, Teneriffa (Kanaren)",
+    "country": "Spanien",
+    "flag": "🇪🇸",
+    "discipline": "XC",
+    "fai_cat": "FAI Cat 2",
+    "sources": [
+      {
+        "label": "CIVL",
+        "url": "https://civlcomps.org/event/tenerife-xpo-2027"
+      }
+    ],
+    "wing_classes": "Alle zertifizierten Schirme (Open / Serial / Sport / Club – max. 122 Piloten)",
+    "wing_badge": "Alle Klassen (EN-A–CCC)",
+    "tasks_info": "5 geplante Tasks | 2025 (Pre-PWC Tenerife XPO): 5 Tasks (45.2 km, 62.2 km, 58.2 km, ...)",
+    "fees_info": "2027: 265 EUR | Vorjahr (2025): 245 EUR"
+  }
+];
+    const STORAGE_KEY = 'paragliding_comps_2027_buddies_v1';
+
+    let buddyState = {};
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) buddyState = JSON.parse(saved);
+    } catch (e) {
+      console.error(e);
+    }
+
+    function saveBuddyState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(buddyState));
+      } catch (e) {
+        console.error(e);
+      }
+      updateCounters();
+    }
+
+    function toggleBuddy(eventId, buddyKey, checked) {
+      if (!buddyState[eventId]) {
+        buddyState[eventId] = { tobi: false, emanuel: false, frank: false };
+      }
+      buddyState[eventId][buddyKey] = checked;
+      saveBuddyState();
+      renderTable();
+    }
+
+    function updateCounters() {
+      let cTobi = 0, cEmanuel = 0, cFrank = 0;
+      EVENTS_DATA.forEach(ev => {
+        const st = buddyState[ev.id] || {};
+        if (st.tobi) cTobi++;
+        if (st.emanuel) cEmanuel++;
+        if (st.frank) cFrank++;
+      });
+      document.getElementById('stat-tobi').textContent = cTobi;
+      document.getElementById('stat-emanuel').textContent = cEmanuel;
+      document.getElementById('stat-frank').textContent = cFrank;
+    }
+
+    function formatDateDE(iso) {
+      if (!iso) return '';
+      const [y, m, d] = iso.split('-');
+      return `${d}.${m}.${y}`;
+    }
+
+    function getMonthName(m) {
+      const names = {
+        '01': 'Januar 2027', '02': 'Februar 2027', '03': 'März 2027', '04': 'April 2027',
+        '05': 'Mai 2027', '06': 'Juni 2027', '07': 'Juli 2027', '08': 'August 2027',
+        '09': 'September 2027', '10': 'Oktober 2027', '11': 'November 2027', '12': 'Dezember 2027'
+      };
+      return names[m] || m;
+    }
+
+    function getDisciplineBadge(disc) {
+      if (disc.includes('SRS')) return '<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">XC • SRS Sport</span>';
+      if (disc.includes('PWC')) return '<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-purple-500/15 text-purple-400 border border-purple-500/30">XC • PWC</span>';
+      if (disc.includes('Liga') || disc.includes('DM')) return '<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/30">' + disc + '</span>';
+      if (disc.includes('WM')) return '<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-500/15 text-rose-400 border border-rose-500/30">' + disc + '</span>';
+      if (disc.includes('Hike')) return '<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-orange-500/15 text-orange-400 border border-orange-500/30">Hike &amp; Fly</span>';
+      if (disc.includes('Accuracy')) return '<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-teal-500/15 text-teal-400 border border-teal-500/30">Accuracy</span>';
+      return '<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-sky-500/15 text-sky-400 border border-sky-500/30">' + disc + '</span>';
+    }
+
+    function renderTable() {
+      const q = document.getElementById('filter-search').value.trim().toLowerCase();
+      const monthFilter = document.getElementById('filter-month').value;
+      const discFilter = document.getElementById('filter-discipline').value;
+      const wingFilter = document.getElementById('filter-wings').value;
+      const buddyFilter = document.getElementById('filter-buddy').value;
+
+      const filtered = EVENTS_DATA.filter(ev => {
+        const st = buddyState[ev.id] || { tobi: false, emanuel: false, frank: false };
+
+        if (q) {
+          const hay = `${ev.name} ${ev.location} ${ev.country} ${ev.discipline} ${ev.wing_classes} ${ev.tasks_info} ${ev.fees_info}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        if (monthFilter !== 'all') {
+          const m = ev.start.split('-')[1];
+          if (m !== monthFilter) return false;
+        }
+        if (discFilter !== 'all') {
+          if (discFilter === 'XC' && !ev.discipline.includes('XC')) return false;
+          if (discFilter === 'SRS' && !ev.discipline.includes('SRS') && !ev.wing_badge.includes('Sport Class')) return false;
+          if (discFilter === 'Liga' && !ev.discipline.includes('Liga') && !ev.discipline.includes('DM') && !ev. discipline.includes('Junior')) return false;
+          if (discFilter === 'PWC' && !ev.discipline.includes('PWC')) return false;
+          if (discFilter === 'Hike & Fly' && !ev.discipline.includes('Hike')) return false;
+          if (discFilter === 'Accuracy' && !ev.discipline.includes('Accuracy')) return false;
+        }
+        if (wingFilter !== 'all') {
+          if (wingFilter === 'only-enc' && !ev.wing_badge.includes('Sport Class')) return false;
+          if (wingFilter === 'enc' && ev.wing_badge.includes('CCC / EN-D (PWC')) return false;
+          if (wingFilter === 'ccc' && ev.wing_badge.includes('Sport Class')) return false;
+        }
+        if (buddyFilter !== 'all') {
+          if (buddyFilter === 'any' && !(st.tobi || st.emanuel || st.frank)) return false;
+          if (buddyFilter === 'all3' && !(st.tobi && st.emanuel && st.frank)) return false;
+          if (buddyFilter === 'tobi' && !st.tobi) return false;
+          if (buddyFilter === 'emanuel' && !st.emanuel) return false;
+          if (buddyFilter === 'frank' && !st.frank) return false;
+        }
+        return true;
+      });
+
+      document.getElementById('stat-total').textContent = filtered.length;
+
+      const tbody = document.getElementById('comp-tbody');
+      let html = '';
+      let lastMonth = '';
+
+      filtered.forEach((ev, idx) => {
+        const m = ev.start.split('-')[1];
+        if (m !== lastMonth) {
+          lastMonth = m;
+          html += `
+            <tr class="bg-slate-950/90 border-y border-slate-800">
+              <td colspan="11" class="py-2 px-4 text-xs font-bold uppercase tracking-widest text-sky-400">
+                🗓️ ${getMonthName(m)}
+              </td>
+            </tr>
+          `;
+        }
+
+        const st = buddyState[ev.id] || { tobi: false, emanuel: false, frank: false };
+        const allThree = st.tobi && st.emanuel && st.frank;
+        const anySelected = st.tobi || st.emanuel || st.frank;
+        const rowClass = allThree ? 'row-selected-squad' : (anySelected ? 'row-selected-any' : 'hover:bg-slate-800/40');
+
+        const sourceLinks = ev.sources.map(s =>
+          `<a href="${s.url}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-slate-800 hover:bg-sky-500/20 text-slate-300 hover:text-sky-300 border border-slate-700 transition">${s.label} ↗</a>`
+        ).join(' ');
+
+        html += `
+          <tr class="${rowClass} transition-colors">
+            <td class="py-3.5 px-3 text-center text-slate-500 mono text-xs">${idx + 1}</td>
+            <td class="py-3.5 px-3 font-semibold text-white mono text-xs whitespace-nowrap">${formatDateDE(ev.start)}</td>
+            <td class="py-3.5 px-3 text-slate-300 mono text-xs whitespace-nowrap">${formatDateDE(ev.end)}</td>
+            <td class="py-3.5 px-4">
+              <div class="font-bold text-white leading-snug">${ev.name}</div>
+              <div class="flex flex-wrap items-center gap-1.5 mt-1.5">
+                ${getDisciplineBadge(ev.discipline)}
+                <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-800/80 text-slate-400 border border-slate-700/70">${ev.fai_cat}</span>
+                ${sourceLinks}
+              </div>
+            </td>
+            <td class="py-3.5 px-4">
+              <div class="font-medium text-slate-200">${ev.flag} ${ev.location}</div>
+              <div class="text-xs text-slate-400 mt-0.5">${ev.country}</div>
+            </td>
+            <td class="py-3.5 px-4">
+              <div class="inline-block px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-800 text-sky-300 border border-slate-700 mb-1">${ev.wing_badge}</div>
+              <div class="text-xs text-slate-300 leading-relaxed">${ev.wing_classes}</div>
+            </td>
+            <td class="py-3.5 px-4 text-xs text-slate-300 leading-relaxed">
+              ${ev.tasks_info}
+            </td>
+            <td class="py-3.5 px-4 text-xs text-slate-300 leading-relaxed">
+              ${ev.fees_info}
+            </td>
+            <td class="py-3.5 px-3 text-center bg-sky-950/10 border-l border-slate-800/80">
+              <input type="checkbox" class="buddy-cb buddy-cb-tobi" ${st.tobi ? 'checked' : ''}
+                onchange="toggleBuddy('${ev.id}', 'tobi', this.checked)" title="Tobi fliegt mit" />
+            </td>
+            <td class="py-3.5 px-3 text-center bg-emerald-950/10 border-l border-slate-800/80">
+              <input type="checkbox" class="buddy-cb buddy-cb-emanuel" ${st.emanuel ? 'checked' : ''}
+                onchange="toggleBuddy('${ev.id}', 'emanuel', this.checked)" title="Emanuel fliegt mit" />
+            </td>
+            <td class="py-3.5 px-3 text-center bg-amber-950/10 border-l border-slate-800/80">
+              <input type="checkbox" class="buddy-cb buddy-cb-frank" ${st.frank ? 'checked' : ''}
+                onchange="toggleBuddy('${ev.id}', 'frank', this.checked)" title="Frank fliegt mit" />
+            </td>
+          </tr>
+        `;
+      });
+
+      if (filtered.length === 0) {
+        html = `
+          <tr>
+            <td colspan="11" class="py-12 text-center text-slate-400">
+              Keine Wettbewerbe für diese Filterkombination gefunden.
+            </td>
+          </tr>
+        `;
+      }
+
+      tbody.innerHTML = html;
+    }
+
+    function resetFilters() {
+      document.getElementById('filter-search').value = '';
+      document.getElementById('filter-month').value = 'all';
+      document.getElementById('filter-discipline').value = 'all';
+      document.getElementById('filter-wings').value = 'all';
+      document.getElementById('filter-buddy').value = 'all';
+      renderTable();
+    }
+
+    function togglePrologue() {
+      const body = document.getElementById('prologue-body');
+      const btn = document.getElementById('btn-toggle-prologue');
+      if (body.classList.contains('hidden')) {
+        body.classList.remove('hidden');
+        btn.textContent = 'Einklappen ▲';
+      } else {
+        body.classList.add('hidden');
+        btn.textContent = 'Ausklappen ▼';
+      }
+    }
+
+    function exportCSV() {
+      const headers = ['Nr', 'Event Beginn', 'Event Ende', 'Wettbewerb', 'Disziplin', 'FAI Kategorie', 'Austragungsort', 'Land', 'Freigegebene Schirmklassen', 'Geplante & Vergangene Tasks', 'Gebuehren (2027 & Vorjahre)', 'Link', 'Tobi', 'Emanuel', 'Frank'];
+      const rows = [headers];
+      EVENTS_DATA.forEach((ev, i) => {
+        const st = buddyState[ev.id] || { tobi: false, emanuel: false, frank: false };
+        const link = ev.sources.map(s => s.url).join(' | ');
+        rows.push([
+          i + 1,
+          ev.start,
+          ev.end,
+          `"${ev.name.replace(/"/g, '""')}"`,
+          `"${ev.discipline}"`,
+          `"${ev.fai_cat}"`,
+          `"${ev.location.replace(/"/g, '""')}"`,
+          `"${ev.country}"`,
+          `"${ev.wing_classes.replace(/"/g, '""')}"`,
+          `"${ev.tasks_info.replace(/"/g, '""')}"`,
+          `"${ev.fees_info.replace(/"/g, '""')}"`,
+          `"${link}"`,
+          st.tobi ? 'JA' : 'NEIN',
+          st.emanuel ? 'JA' : 'NEIN',
+          st.frank ? 'JA' : 'NEIN'
+        ]);
+      });
+      const csvContent = '\uFEFF' + rows.map(r => r.join(';')).join('\r\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Paragliding_Comps_2027_Tobi_Emanuel_Frank.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function exportJSON() {
+      const blob = new Blob([JSON.stringify(buddyState, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'paragliding_2027_buddy_auswahl.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          buddyState = data;
+          saveBuddyState();
+          renderTable();
+        } catch (err) {
+          alert('Ungültige JSON-Datei');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Initial render
+    updateCounters();
+    renderTable();
+  </script>
+</body>
+</html>
